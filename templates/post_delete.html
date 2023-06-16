@@ -1,0 +1,22 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}Delete{% endblock title %}
+
+{% block content %}
+<h1>Удаление</h1>
+<hr>
+
+    {% autoescape off %}
+    <h2>{{ post.title }}</h2>
+    <span>{{ post.text|linebreaks|truncatewords:33 }}<br></span>
+    {% endautoescape %}
+    <hr>
+
+    <span>дата публикации: {{ post.time_create|date:'d-M-Y f' }}, | ({{ post.author }})</span><br>
+    <span>Категория: {{ post.get_category_display }}</span>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Удаляем "{{ object.title }}"?</p>
+    <input type="submit" value="Удалить" />
+</form>
+{% endblock content %}

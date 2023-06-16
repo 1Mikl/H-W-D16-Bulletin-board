@@ -1,0 +1,46 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Post
+{% endblock title %}
+
+{% block content %}
+    <h3>Объявление!</h3>
+        <table>
+            <tr>
+                <h3> {{ next_sale|default_if_none:"Приглашай друзей и получай призы!" }} </h3>
+                <hr>
+                <h1>{{ post.title }}</h1>
+                <h5>{{ post.time_create|date:'d M Y' }}</h5>
+                {% if post.upload %}
+                <p><img class="img-article-left" src="{{post.upload.url}}"></p>
+                {% endif %}
+                <td>{{ post.text|linebreaks}}</td>
+                <hr>
+                <span>Автор: {{ post.author }}</span>
+                <span>| Категория: {{ post.get_category_display }}</span>
+                <span>| Дата публикации: {{ post.time_create|date:'d-M-Y f' }}</span>
+
+            <br><br>
+
+            {% if user.is_authenticated %}
+            <a class="btn btn-secondary" href="{% url 'home' %}" role="button">Закрыть</a>
+            <a class="btn btn-secondary" href="/post/{{ post.id }}/update" role="button">Редактировать</a>
+            <a class="btn btn-secondary" href="/post/{{ post.id }}/delete" role="button">Удалить</a>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+            <br><br>
+                {% if response == "Откликнулся" %}
+                    <a style="color:red">Вы откликнулись на это объявление.</a><br>
+                    <a href="{% url 'responses' %}">Посмотреть свои отклики</a>
+                {% elif response == "Мое_объявление" %}
+                    <a style="color:red">Вы не можете откликнуться на свое объявление.</a><br>
+                {% else %}
+                    <a class="btn btn-secondary" href="/response/{{ post.id }}" role="button">Откликнуться</a>
+                {% endif %}
+            {% endif %}
+
+
+        </table>
+{% endblock content %}
